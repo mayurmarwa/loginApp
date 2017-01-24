@@ -15,7 +15,22 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
+import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
+import { SignupPage } from '../pages/signup/signup';
 import { Auth } from '../providers/auth';
+import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
+// AF2 Settings
+var firebaseConfig = {
+    apiKey: "AIzaSyBQHf2p8RLOuw7i_DHdsfc8HHCFfwcIPEQ",
+    authDomain: "metbazaardev.firebaseapp.com",
+    databaseURL: "https://metbazaardev.firebaseio.com",
+    storageBucket: "metbazaardev.appspot.com",
+    messagingSenderId: "79899062384"
+};
+var myFirebaseAuthConfig = {
+    provider: AuthProviders.Password,
+    method: AuthMethods.Password
+};
 export var AppModule = (function () {
     function AppModule() {
     }
@@ -27,10 +42,13 @@ export var AppModule = (function () {
                 ContactPage,
                 HomePage,
                 TabsPage,
-                LoginPage
+                LoginPage,
+                ResetpasswordPage,
+                SignupPage
             ],
             imports: [
-                IonicModule.forRoot(MyApp)
+                IonicModule.forRoot(MyApp),
+                AngularFireModule.initializeApp(firebaseConfig, myFirebaseAuthConfig)
             ],
             bootstrap: [IonicApp],
             entryComponents: [
@@ -39,7 +57,9 @@ export var AppModule = (function () {
                 ContactPage,
                 HomePage,
                 TabsPage,
-                LoginPage
+                LoginPage,
+                ResetpasswordPage,
+                SignupPage
             ],
             providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler }, Auth]
         }), 

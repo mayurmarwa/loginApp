@@ -8,49 +8,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component } from '@angular/core';
+import { Platform } from 'ionic-angular';
+import { StatusBar, Splashscreen } from 'ionic-native';
+import { AngularFire } from 'angularfire2';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
-import { Auth } from '../providers/auth';
-import { LoadingController } from 'ionic-angular';
 export var MyApp = (function () {
-    //constructor(platform: Platform) {
-    //platform.ready().then(() => {
-    // Okay, so the platform is ready and our plugins are available.
-    // Here you can do any higher level native things you might need.
-    //StatusBar.styleDefault();
-    //Splashscreen.hide();
-    //});
-    //}
-    function MyApp(auth, loadingCtrl) {
+    function MyApp(platform, af) {
         var _this = this;
-        this.auth = auth;
-        this.loadingCtrl = loadingCtrl;
-        this.presentLoading();
-        this.auth.login().then(function (isLoggedIn) {
-            if (isLoggedIn) {
-                console.log('loggedin?');
-                _this.loader.dismiss();
+        var authObserver = af.auth.subscribe(function (user) {
+            if (user) {
                 _this.rootPage = TabsPage;
+                authObserver.unsubscribe();
             }
             else {
-                console.log('notloggedin');
-                _this.loader.dismiss();
                 _this.rootPage = LoginPage;
+                authObserver.unsubscribe();
             }
-            //this.loader.dismissALL();
+        });
+        platform.ready().then(function () {
+            // Okay, so the platform is ready and our plugins are available.
+            // Here you can do any higher level native things you might need.
+            StatusBar.styleDefault();
+            Splashscreen.hide();
         });
     }
-    MyApp.prototype.presentLoading = function () {
-        this.loader = this.loadingCtrl.create({
-            content: "Authenticating..."
-        });
-        this.loader.present();
-    };
     MyApp = __decorate([
         Component({
             templateUrl: 'app.html'
         }), 
-        __metadata('design:paramtypes', [Auth, LoadingController])
+        __metadata('design:paramtypes', [Platform, AngularFire])
     ], MyApp);
     return MyApp;
 }());
